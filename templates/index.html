@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理界面</title>
+    <!-- 引用Bootstrap的CSS资源 -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/select2.min.css') }}" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='ico.svg') }}" type="image/x-icon">
+    <style>
+        body {
+            background-image: url('/random_image'); /* 使用API加载背景图片 */
+            background-size: cover; /* 背景图片覆盖整个页面 */
+            background-position: center; /* 居中背景图片 */
+            background-repeat: no-repeat; /* 不重复背景图片 */
+            background-attachment: fixed; /* 背景固定，不随滚动条移动 */
+        }
+        .sidebar {
+            background-color: rgba(248, 249, 250, 0.8); /* 浅灰色背景，带透明度 */
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            padding: 20px 10px;
+            border-right: 1px solid #dee2e6; /* 添加一个边框，模仿Bootstrap的卡片样式 */
+        }
+        .list-group a {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .list-group a.active {
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff; /* Bootstrap的primary颜色 */
+        }
+        .content {
+            {% if session.get('logged_in') %}
+            margin-left: 270px; /* 为导航栏留出空间 */
+            {% else %}
+            margin: 0 auto; /* 居中内容 */
+            max-width: 800px; /* 设置最大宽度 */
+            {% endif %}
+            padding: 20px;
+        }
+        .version {
+            color: #6c757d;
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+        /* 新增的样式 */
+        .card {
+            background-color: rgba(255, 255, 255, 0.8); /* 白色背景，带透明度 */
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    {% if session.get('logged_in') %}
+    <div class="sidebar">
+        <!-- 导航菜单使用list-group -->
+        <div class="list-group">
+            <a href="{{ url_for('index') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'index' %}active{% endif %}">首页</a>
+            <a href="{{ url_for('configs') }}" class="list-group-item list-group-item-action {% if request.endpoint in ['configs', 'edit_config', 'new_config'] %}active{% endif %}">创建strmの配置文件</a>
+            <a href="{{ url_for('scheduled_tasks') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'scheduled_tasks' %}active{% endif %}">定时任务</a>
+            <a href="{{ url_for('settings') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'settings' %}active{% endif %}">脚本全局设置</a>
+            <a href="{{ url_for('invalid_file_trees') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'invalid_file_trees' %}active{% endif %}">失效的STRM文件查看</a>
+            <a href="{{ url_for('other') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'other' %}active{% endif %}">其他</a>
+            <a href="{{ url_for('about') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'about' %}active{% endif %}">关于</a>
+            <a href="{{ url_for('logout') }}" class="list-group-item list-group-item-action">登出</a>
+        </div>
+
+        <!-- 底部版本号 -->
+        <div class="version">
+            版本: {{ g.local_version }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- 内容区 -->
+    <div class="content">
+        <div class="container">
+            <!-- 显示闪现消息 -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="关闭"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <!-- 引用Bootstrap的JS资源 -->
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
