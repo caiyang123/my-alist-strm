@@ -410,13 +410,14 @@ def process_with_cache(webdav, config, script_config, config_id, size_threshold,
         logger.info("正在执行增量更新...")
 
         new_directory = config.get('new_directory')
+        new_directory_prefix = config.get('new_directory_prefix')
         max_file_count = config.get('max_file_count')
         if new_directory == 1:
             logger.info(f"文件夹内文件个数: {directory_info['total']}")
             if directory_info is not None and directory_info['total'] >= max_file_count:
                 logger.info(f"total > { max_file_count }")
                 logger.info(f"root_directory {root_directory}")
-                new_directory_name = get_directory_name()
+                new_directory_name = get_directory_name(new_directory_prefix)
                 logger.info(f"new_directory_name {new_directory_name}")
                 new_root_directory = root_directory.replace(root_directory.split('/')[-1], new_directory_name)
                 logger.info(f"new_root_directory {new_root_directory}")
@@ -476,10 +477,10 @@ def process_with_cache(webdav, config, script_config, config_id, size_threshold,
 
     logger.info(f"总共下载了 {download_file_counter} 个文件")
 
-def get_directory_name():
+def get_directory_name(new_directory_prefix):
     today = datetime.now()
     formatted_date = today.strftime('%Y-%m-%d-%H')
-    return formatted_date
+    return new_directory_prefix + "_" + formatted_date
 
 if __name__ == '__main__':
     db_handler = DBHandler()

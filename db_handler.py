@@ -28,6 +28,7 @@ class DBHandler:
                                 download_enabled INTEGER DEFAULT 1,
                                 download_interval_range TEXT,
                                 new_directory INTEGER DEFAULT 0,
+                                new_directory_prefix TEXT,
                                 max_file_count INTEGER DEFAULT 50
                                 )''')
 
@@ -143,7 +144,7 @@ class DBHandler:
 
     def get_webdav_config(self, config_id):
         self.cursor.execute('''
-            SELECT config_name, url, username, password, rootpath, target_directory, download_enabled, update_mode,  download_interval_range,  new_directory, max_file_count
+            SELECT config_name, url, username, password, rootpath, target_directory, download_enabled, update_mode,  download_interval_range,  new_directory, new_directory_prefix, max_file_count
             FROM config
             WHERE config_id=? LIMIT 1
         ''', (config_id,))
@@ -151,7 +152,7 @@ class DBHandler:
         result = self.cursor.fetchone()
 
         if result:
-            config_name, url, username, password, rootpath, target_directory, download_enabled, update_mode, download_interval_range, new_directory, max_file_count = result
+            config_name, url, username, password, rootpath, target_directory, download_enabled, update_mode, download_interval_range, new_directory, new_directory_prefix, max_file_count = result
             parsed_url = urlparse(url)
 
             protocol = parsed_url.scheme
@@ -182,6 +183,7 @@ class DBHandler:
                 'update_mode': update_mode,
                 'download_interval_range': (min_interval, max_interval), # 返回最小和最大间隔
                 'new_directory': new_directory,
+                'new_directory_prefix': new_directory_prefix,
                 'max_file_count': max_file_count
             }
         else:

@@ -293,6 +293,7 @@ def edit_config(config_id):
             download_enabled = int(request.form.get('download_enabled', 0))  # 获取是否启用下载功能，默认0（禁用）
             update_mode = request.form['update_mode']  # 获取更新模式
             new_directory = request.form['new_directory']
+            new_directory_prefix = request.form['new_directory_prefix']
             max_file_count = request.form['max_file_count']
 
             # 前端验证已经做过，这里做后端验证
@@ -307,9 +308,9 @@ def edit_config(config_id):
             # 更新配置，包括下载启用状态、更新模式和大小阈值
             db_handler.cursor.execute('''
                 UPDATE config 
-                SET config_name = ?, url = ?, username = ?, password = ?, rootpath = ?, target_directory = ?, download_enabled = ?, update_mode = ?, download_interval_range = ?, new_directory = ?, max_file_count = ?
+                SET config_name = ?, url = ?, username = ?, password = ?, rootpath = ?, target_directory = ?, download_enabled = ?, update_mode = ?, download_interval_range = ?, new_directory = ?, new_directory_prefix = ?, max_file_count = ?
                 WHERE config_id = ?
-            ''', (config_name, url, username, password, rootpath, target_directory, download_enabled, update_mode, download_interval_range, new_directory, max_file_count, config_id))
+            ''', (config_name, url, username, password, rootpath, target_directory, download_enabled, update_mode, download_interval_range, new_directory, new_directory_prefix, max_file_count, config_id))
             db_handler.conn.commit()
 
             flash('配置已成功更新！', 'success')
@@ -317,7 +318,7 @@ def edit_config(config_id):
 
         # GET 请求时，获取并显示现有的配置项
         db_handler.cursor.execute('''
-            SELECT config_name, url, username, password, rootpath, target_directory, download_enabled, update_mode, download_interval_range, new_directory, max_file_count 
+            SELECT config_name, url, username, password, rootpath, target_directory, download_enabled, update_mode, download_interval_range, new_directory, new_directory_prefix, max_file_count 
             FROM config 
             WHERE config_id = ?
         ''', (config_id,))
@@ -353,6 +354,7 @@ def new_config():
             download_enabled = int(request.form.get('download_enabled', 0))  # 获取是否启用下载功能，默认0（禁用）
             update_mode = request.form['update_mode']  # 获取更新模式
             new_directory = request.form['new_directory']
+            new_directory_prefix = request.form['new_directory_prefix']
             max_file_count = request.form['max_file_count']
 
             # 前端验证已经做过，这里做后端验证
@@ -366,9 +368,9 @@ def new_config():
 
             # 插入新配置到数据库，确保所有字段都被插入
             db_handler.cursor.execute('''
-                INSERT INTO config (config_name, url, username, password, rootpath, target_directory, download_interval_range, download_enabled, update_mode, new_directory, max_file_count) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (config_name, url, username, password, rootpath, target_directory, download_interval_range, download_enabled, update_mode, new_directory, max_file_count))
+                INSERT INTO config (config_name, url, username, password, rootpath, target_directory, download_interval_range, download_enabled, update_mode, new_directory, new_directory_prefix, max_file_count) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (config_name, url, username, password, rootpath, target_directory, download_interval_range, download_enabled, update_mode, new_directory, new_directory_prefix, max_file_count))
             db_handler.conn.commit()
 
             flash('新配置已成功添加！', 'success')
