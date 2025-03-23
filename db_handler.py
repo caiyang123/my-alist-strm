@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 class DBHandler:
     def __init__(self, db_file=None):
         # 如果 db_file 为空，则从环境变量中读取或使用默认值 '/config/config.db'
-        self.db_file = db_file or os.getenv('DB_FILE', 'G:\\PythonProject\\alist-strm-main\\config\\config.db')
+        self.db_file = db_file or os.getenv('DB_FILE', '/config/config.db')
         # 使用 check_same_thread=False 允许跨线程访问
         self.conn = sqlite3.connect(self.db_file, check_same_thread=False)
         self.cursor = self.conn.cursor()

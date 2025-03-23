@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     cron \
     tzdata \
     supervisor \
+    vim \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

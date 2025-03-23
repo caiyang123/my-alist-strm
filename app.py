@@ -30,8 +30,8 @@ local_version = "6.0.8"
 
 
 
-CRON_BACKUP_FILE = "G:\\PythonProject\\alist-strm-main\\config\\cron.bak"
-ENV_FILE = "G:\\PythonProject\\alist-strm-main\\config\\app.env"
+CRON_BACKUP_FILE = "/config/cron.bak"
+ENV_FILE = "/config/app.env"
 
 
 
@@ -1096,7 +1096,7 @@ def sync_cron_with_backup():
 
 import os
 
-ENV_FILE = 'G:\\PythonProject\\alist-strm-main\\config\\app.env'
+ENV_FILE = '/config/app.env'
 
 def ensure_env_file():
     """确保 app.env 存在并同步环境变量，如果没有安全码和端口则自动填入默认值"""
@@ -1104,7 +1104,7 @@ def ensure_env_file():
     default_security_code = 'alist-strm'
 
     # 创建 /config 目录（如果不存在）
-    config_dir = 'G:\\PythonProject\\alist-strm-main\\config'
+    config_dir = '/config'
     if not os.path.exists(config_dir):
         os.makedirs(config_dir)
         logger.info(f"创建了目录: {config_dir}")

@@ -1,0 +1,1 @@
+*/1 * * * * cd /app && /usr/local/bin/python3.9 /app/replace_domain.py /vol1/1000/strm http://192.168.3.1:5244 http://zxr.com:5244
