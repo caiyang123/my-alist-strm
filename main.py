@@ -479,7 +479,7 @@ def process_with_cache(webdav, config, script_config, config_id, size_threshold,
 
 def get_directory_name(new_directory_prefix):
     today = datetime.now()
-    formatted_date = today.strftime('%Y-%m-%d-%H')
+    formatted_date = today.strftime('%Y_%m_%d')
     return new_directory_prefix + "_" + formatted_date
 
 if __name__ == '__main__':
